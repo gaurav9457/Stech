@@ -1,0 +1,1339 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NavTab Form</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+      crossorigin="anonymous"
+    ></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Josefin+Sans&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      body {
+        background-image: linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 100%);
+        /* background-position: center;
+    background-repeat: no-repeat;
+     */
+      }
+      .popup {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        /* background-color: #efe9e9; */
+        /* background: transparent; */
+        /* background-color: #0093E9;
+            background-image: linear-gradient(160deg, #0093E9 0%, #80D0C7 100%); */
+        background: linear-gradient(to right, #36d1dc, #5b86e5);
+        text-align: center;
+        overflow: scroll;
+      }
+      .popup-content {
+        position: relative;
+        /* top: 50%; */
+        /* transform: translateY(-50%); */
+        /* background-color: black; */
+        /* background-color: #899292; */
+        /* background-image: linear-gradient(62deg, #8EC5FC 0%, #E0C3FC 100%); */
+        background: linear-gradient(to right, #36d1dc, #5b86e5);
+
+        color: white;
+        width: 90%;
+        max-width: 850px;
+        margin: 0 auto;
+        padding: 20px;
+        border-radius: 5px;
+      }
+
+      .close {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        cursor: pointer;
+        color: aliceblue;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- -----------NavBar--------- -->
+    <!-- <div class="container-fluid"> -->
+    <nav
+      class="navbar navbar-expand-md bg-info shadow p-3 mb-0"
+      style="
+        background-image: linear-gradient(-20deg, #b721ff 0%, #21d4fd 100%);
+      "
+    >
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#"
+          ><strong style="color: white; font-family: 'Josefin Sans', sans-serif"
+            >Employee_Registration</strong
+          >
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a
+                class="nav-link active"
+                aria-current="page"
+                href="http://127.0.0.1:5500/NavTabForm/PersonalDetailForm.html?#"
+                >Home</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                href="http://127.0.0.1:5500/NavTabForm/PersonaldetailTable.html"
+                style="text-decoration: underline"
+                >Employment</a
+              >
+            </li>
+          </ul>
+          <form class="d-flex" role="search">
+            <input
+              class="form-control me-2"
+              id="SData"
+              type="search"
+              placeholder="Search"
+              oninput="searchItem()"
+            />
+            <button
+              class="btn btn-outline-success"
+              type="button"
+              
+            >
+              Search
+            </button>
+          </form>
+        </div>
+      </div>
+    </nav>
+    <!--------------Table-----------  -->
+    <div
+      class="container mt-5 shadow p-3 mb-5 bg-body-tertiary rounded"
+      id="T-list"
+    ></div>
+
+    <!-- --------popup-------- -->
+
+    <div class="container" style="border: 0px solid red">
+      <div id="popup" class="popup">
+        <div class="popup-content">
+          <span class="close" onclick="closePopup()">&times;</span>
+          <h2>Employee data Submitted</h2>
+          <div id="popup-content"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- </div> -->
+    <script>
+      function getItem() {
+        let personalData = localStorage.getItem("formData");
+        let data = JSON.parse(personalData);
+        //  console.log(data);
+        //  console.log(data[1]);
+        Tabledata(data);
+      }
+      getItem();
+
+      function Tabledata(data) {
+        let table =
+          ' <table class="table table-striped table-hover mt-4 shadow p-3 mb-5 bg-body-tertiary rounded" id="myTable" >';
+        table += `<thead class="table-success" >
+                <tr >
+                    
+                    <th scope="col">First-Name</th>
+                    <th scope="col">Last-Name</th>
+                    <th scope="col">Gender</th>
+                    
+                    <th scope="col" >Action</th>
+
+                </tr>
+            </thead>`;
+            // let tid=0;
+        data.forEach((tRow, index) => {
+          //tid++;
+          table = table + `<tr>`;
+          table = table + `<td> ${tRow.firstName}</td>`;
+          table = table + `<td> ${tRow.lastName}</td>`;
+          table = table + `<td> ${tRow.gender}</td>`;
+         
+
+          table =
+            table +
+            `<td><button class="btn btn-warning btn-sm" onclick="getdata(${index})"> view</button>
+            <button class="btn btn-danger btn-sm" onclick=""> Delete</button></td>`;
+          table += `</tr>`;
+        });
+        table += "</table>";
+        document.getElementById("T-list").innerHTML = table;
+      }
+
+      function getdata(r) {
+        //========
+        // var e = r.parentNode.parentNode.rowIndex;
+        var i = r;
+        console.log(i);
+        let pdata = localStorage.getItem("formData");
+        let aData = localStorage.getItem("Account");
+        let fData = localStorage.getItem("Family");
+        let eData = localStorage.getItem("Employment");
+        let astData = localStorage.getItem("Assest");
+
+        let personalData = JSON.parse(pdata);
+        let accountData = JSON.parse(aData);
+        let familyData = JSON.parse(fData);
+        let employeeData = JSON.parse(eData);
+        let assestData = JSON.parse(astData);
+
+        console.log(personalData[i].firstName);
+        console.log(accountData[i].Bname);
+        console.log(familyData);
+        console.log(employeeData);
+        console.log(assestData);
+        // document.getElementById("fst").value=personalData[i].firstName;
+        // document.getElementById("lst").value=personalData[i].lastName;
+
+        // const popupContent = `
+        //       <p><b>First Name:</b> ${personalData[0].firstName}</p>
+        //       <p><b>Last name:</b> ${personalData[0].lastName}</p>
+
+        //       `;
+
+        const popup = document.getElementById("popup");
+        const popupContentDiv = document.getElementById("popup-content");
+
+        popupContentDiv.innerHTML = `    <div class="container">
+    <div class="col-md-12">
+      <div class="row">
+      <div class="col-md-6">
+         <h4> ${personalData[i].firstName} Personal Details:</h4>
+        <div class="p-0 m-0">
+  <table class=" table table-primary table-striped table-hover shadow p-0 mb-0">
+    <tr><td>First Name:</td><td><input type="text" placeholder=" ${personalData[i].firstName}" disabled></td></tr>
+    <tr><td>Last Name:</td><td><input type="text" placeholder="${personalData[i].lastName}" disabled></td></tr>
+    <tr><td>Gender :</td><td><input type="text" placeholder="${personalData[i].gender}" disabled></td></tr>
+    <tr><td>Age :</td><td><input type="text"               placeholder="${personalData[i].age}" disabled></td></tr>
+    <tr><td>City :</td><td><input type="text"           placeholder="${personalData[i].City}" disabled></td></tr>
+    <tr><td>State :</td><td><input type="text"placeholder="${personalData[i].state}" disabled></td></tr>
+    <tr><td>Zip code:</td><td><input type="text"         placeholder="${personalData[i].Zip}"disabled></td></tr>
+    <tr><td>Passout Year:</td><td><input type="text"           placeholder="${personalData[i].Passout}" disabled></td></tr>
+    <tr><td>Marks :</td><td><input type="text"       placeholder="${personalData[i].Marks}" disabled></td></tr>
+    <tr><td>Stream :</td><td><input type="text"      placeholder="${personalData[i].field}"disabled></td></tr>
+    </table>
+  </div>
+      </div>
+      <div class="col-md-6">
+        <h4>Account Details:</h4>
+        <div class="p-0 m-0">
+        <table class=" table table-primary table-striped table-hover shadow p-0 mb-0">
+          <tr><td>Bank Name:</td><td><input type="text" placeholder=" ${accountData[i].Bname}" disabled></td></tr>
+          <tr><td>Branch Name:</td><td><input type="text" placeholder="${accountData[i].Branch}" disabled></td></tr>
+          <tr><td>IFSC Code :</td><td><input type="text" placeholder="${accountData[i].Ifsc}" disabled></td></tr>
+          <tr><td>Account Number:</td><td><input type="text" placeholder="${accountData[i].accn}" disabled></td></tr>
+          <tr><td>Email Id :</td><td><input type="text"           placeholder="${accountData[i].Emailr}" disabled></td></tr>
+          <tr><td>Email Id(optional) :</td><td><input type="text" placeholder="${accountData[i].Emailo}" disabled></td></tr>
+          <tr><td>Mobile Number:</td><td><input type="text"       placeholder="${accountData[i].mob}"disabled></td></tr>
+          <tr><td>Telephone :</td><td><input type="text"          placeholder="${accountData[i].tel}" disabled></td></tr>
+          <tr><td>Aadhar Number:</td><td><input type="text"       placeholder="${accountData[i].aadhar}" disabled></td></tr>
+          <tr><td>Pan Number:</td><td><input type="text"          placeholder="${accountData[i].pan}"disabled></td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6">
+        <h4>Family Details:</h4>
+  <div class="p-0 m-0">
+  <table class=" table table-primary table-striped table-hover shadow p-0 mb-0">
+    <tr><td>Fathers name :</td><td><input type="text" placeholder="${familyData[i].fatherName}" disabled></td></tr>
+    <tr><td>Mothers name :</td><td><input type="text" placeholder="${familyData[i].motherName}" disabled></td></tr>
+    <tr><td>Matrial Status :</td><td><input type="text" placeholder="${familyData[i].MaritalStatus}" disabled></td></tr>
+    <tr><td>Spouse Name :</td><td><input type="text" placeholder="${familyData[i].spouseName}" disabled></td></tr>
+    <tr><td>Current Address :</td><td><input type="text" placeholder="${familyData[i].CCity}" disabled></td></tr>
+    <tr><td>State :</td><td><input type="text" placeholder="${familyData[i].CState}" disabled></td></tr>
+    <tr><td>Zip code:</td><td><input type="text" placeholder="${familyData[i].CZip}" disabled></td></tr>
+    <tr><td>Permanant Address :</td><td><input type="text" placeholder="${familyData[i].PCity}" disabled></td></tr>
+    <tr><td>State :</td><td><input type="text" placeholder="${familyData[i].PState}" disabled></td></tr>
+    <tr><td>Zip code:</td><td><input type="text" placeholder="${familyData[i].PZip}" disabled></td></tr>
+    </table>
+  </div>
+
+      </div>
+      <div class="col-md-6">
+          <h4>Employment Status :</h4>
+  <div class="p-0 m-0">
+  <table class=" table table-primary table-striped table-hover shadow p-0 mb-0">
+    <tr><td>Company name :</td><td><input type="text" placeholder="${employeeData[i].Company}" disabled></td></tr>
+    <tr><td>Job Title :</td><td><input type="text" placeholder="${employeeData[i].jTitle}" disabled></td></tr>
+    <tr><td>Experience :</td><td><input type="text" placeholder="${employeeData[i].Experience}" disabled></td></tr>
+    <tr><td>Location :</td><td><input type="text" placeholder="${employeeData[i].Location}" disabled></td></tr>
+  </table>
+</div>
+<h4 style="color: rgb(139, 34, 139);">Assest Details :</h4>
+  <div class="p-0 m-0">
+  <table class=" table table-primary table-striped table-hover shadow p-0 mb-0">
+    <tr><td>Bio :</td><td><input type="text" placeholder="${assestData[i].Bio}" disabled></td></tr>
+    <tr><td>Hobbies:</td><td><input type="text" placeholder="${assestData[i].hobbies}" disabled></td></tr>
+  </table>
+</div>
+      </div>
+    </div>
+  </div>
+  </div>
+              `;
+
+        popup.style.display = "block";
+
+        // alert("functon CALLED")
+      }
+
+      function closePopup() {
+        const popup = document.getElementById("popup");
+        popup.style.display = "none";
+        const popupContentDiv = document.getElementById("popup-content");
+        popupContentDiv.innerHTML = "";
+      }
+
+      function searchItem() {
+        let str = document.getElementById("SData").value;
+        // console.log(str);
+
+        let personalDataS = localStorage.getItem("formData");
+        let dataS = JSON.parse(personalDataS);
+        //    console.log(dataS);
+
+        var tableHead =
+          ` <table class="table table-striped table-hover mt-4 shadow p-3 mb-5 bg-body-tertiary rounded" id="myTable" >
+        <thead class="table-success" >
+                <tr >
+                   
+                    <th scope="col">First-Name</th>
+                    <th scope="col">Last-Name</th>
+                    <th scope="col">Gender</th>
+                    
+                    <th scope="col" >Action</th>
+
+                </tr>
+            </thead>`;
+
+        var tableBody = "";
+
+        dataS.map((val,index) => {
+
+          let search = val.firstName;
+
+          console.log(search);
+          let inputVal = new RegExp(str, "gi");
+          console.log("Regural", inputVal);
+
+          if (inputVal.test(search) ) {
+            tableBody += `<tr> 
+              <td> ${val.firstName}</td>
+              <td> ${val.lastName}</td>
+              <td> ${val.gender}</td>
+               <td><button class="btn btn-warning" onclick="getdata(${index})"> view</button>
+               <button class="btn btn-danger" onclick=""> Delete</button></td>
+              </tr>`;
+          }
+        });
+
+        var table = tableHead + tableBody + "</table>";
+        document.getElementById("T-list").innerHTML = table;
+      }
+   
+      function RemoveData() {
+        
+        
+        
+      }
+   </script>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+      integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
+      integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>
+
+//////////////////////////////////////////////////////////////////  Main Page
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NavTab Form</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+    crossorigin="anonymous"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans&display=swap" rel="stylesheet">
+  <style>
+    body {
+      /* background-image: linear-gradient(120deg, #fdfbfb 0%, #ebedee 100%); */
+      /* background-color: #FFDEE9;
+            background-image: linear-gradient(0deg, #FFDEE9 0%, #B5FFFC 100%); */
+      /* background-image: radial-gradient( circle 674px at 18.3% 77%,  rgba(139,186,244,1) 3.4%, rgba(15,51,92,1) 56.6% ); */
+      background-image: linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 100%);
+      /* background-position: center;
+            background-repeat:no-repeat ;
+            background-size:contain; */
+
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- <div class="container-fluid"> -->
+  <!-- ------------Nav Bar--------------- -->
+  <nav class="navbar navbar-expand-md  bg-info shadow p-3 mb-0 "
+    style="background-image: linear-gradient(-20deg, #b721ff 0%, #21d4fd 100%);">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#"> <strong
+          style="color: white; font-family: 'Josefin Sans', sans-serif;">Employee_Registration</strong> </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page"
+              href="http://127.0.0.1:5500/NavTabForm/PersonalDetailForm.html?#"
+              style="text-decoration: underline;">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="http://127.0.0.1:5500/NavTabForm/PersonaldetailTable.html">Employment</a>
+          </li>
+
+        </ul>
+        <form class="d-flex" role="search">
+          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+          <button class="btn btn-outline-success" type="submit" >Search</button>
+        </form>
+      </div>
+    </div>
+  </nav>
+
+  <!-- -------------------Nav tab----------- -->
+  <div class="container mt-5 shadow-lg p-3 mb-0 bg-body-tertiary rounded">
+    <nav class="">
+      <div class="nav nav-tabs" id="nav-tab" role="tablist">
+        <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button"
+          role="tab" aria-controls="nav-home" aria-selected="true"><strong
+            style="font-family: 'Josefin Sans', sans-serif;">Personal</strong></button>
+        <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button"
+          role="tab" aria-controls="nav-profile" aria-selected="false"><strong
+            style="font-family: 'Josefin Sans', sans-serif;">Account</strong></button>
+        <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-contact" type="button"
+          role="tab" aria-controls="nav-contact" aria-selected="false"><strong
+            style="font-family: 'Josefin Sans', sans-serif;">Family</strong></button>
+        <button class="nav-link" id="nav-disabled-tab" data-bs-toggle="tab" data-bs-target="#nav-disabled" type="button"
+          role="tab" aria-controls="nav" aria-selected="false"><strong
+            style="font-family: 'Josefin Sans', sans-serif;">Employment</strong></button>
+        <button class="nav-link" id="nav-Assest-tab" data-bs-toggle="tab" data-bs-target="#nav-Assest" type="button"
+          role="tab" aria-controls="nav" aria-selected="false"><strong
+            style="font-family: 'Josefin Sans', sans-serif;">Assest</strong></button>
+      </div>
+    </nav>
+    <!-- ----------------Personal Information---------------- -->
+    <!-- <form action="" id="Pform"> -->
+    <div class="tab-content" id="nav-tabContent">
+
+      <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab" tabindex="0">
+
+        <div class="accordion accordion-flush mt-4" id="accordionFlushExample">
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                <strong>Personal Information</strong>
+              </button>
+            </h2>
+            <div id="flush-collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+              <div class="accordion-body">
+                <div class="row">
+                  <div class="col">
+                    <input type="text" class="form-control" placeholder="First name *" aria-label="First name"
+                      id="Fname">
+                  </div>
+                  <div class="col">
+                    <input type="text" class="form-control" placeholder="Last name *" aria-label="Last name" id="Lname">
+
+                  </div>
+                </div>
+                <div class="row mt-3">
+                  <div class="col">
+                    <!-- <input type="text" class="form-control" placeholder="Gender *"
+                                                    aria-label="First name" id="Gender"> -->
+                    <select class="form-select form-select-md" aria-label="Small select example" id="Gender">
+                      <option selected>Select Gender</option>
+                      <option value="Male">Male</option>
+                      <option value="Female">Female</option>
+                      <option value="Other">Other</option>
+                    </select>
+                  </div>
+                  <div class="col">
+                    <input type="tel" class="form-control" placeholder="Age " aria-label="Last name" id="Age"
+                      maxlength="2" minlength="2">
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+                <strong>Address Details</strong>
+              </button>
+            </h2>
+            <div id="flush-collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+              <div class="accordion-body">
+                <div class="row g-3">
+                  <div class="col-sm-7">
+                    <input type="text" class="form-control" placeholder="Flat no, city" aria-label="City" id="City">
+                  </div>
+                  <div class="col-sm">
+                    <input type="text" class="form-control" placeholder="State *" aria-label="State" id="State">
+                  </div>
+                  <div class="col-sm">
+                    <input type="number" class="form-control" placeholder="Zip" aria-label="Zip" id="Zip">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
+                <strong>Education Details</strong>
+              </button>
+            </h2>
+            <div id="flush-collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+              <div class="accordion-body">
+                <div class="row col-md-8 mx-md-5">
+                  <div class="col-md-4">
+                    <label for="Passout" class="form-label">Passout Year :<span style="color: red;">*</span></label>
+                    <input type="tel" class="form-control" id="Passout" placeholder="YYYY" maxlength="4"
+                      minlength="4" />
+                  </div>
+                  <div class="col-md-4">
+                    <label for="Marks" class="form-label">Marks :</label>
+                    <input type="number" id="Marks" class="form-control" placeholder="Enter Marks" />
+                  </div>
+                  <div class="col-md-4">
+                    <label for="field" class="form-label">Stream :<span style="color: red;">*</span></label>
+                    <input type="text" id="stream" class="form-control" placeholder="Enter Field" />
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="col-md-6 mx-md-auto d-flex justify-content-between">
+          <button class="btn btn-success btn-lg mt-3" type="Submit" value="Submit"
+            onclick="personalValidate()">Submit</button>
+          <button class="btn btn-outline-danger btn-lg mt-3" type="" value="Cancle"
+            onclick="clearPersonal()">Cancle</button>
+        </div>
+      </div>
+      <!-- </form> -->
+
+      <!-- --------------Account -------------- -->
+      <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab" tabindex="0">
+        <div class="accordion mt-5" id="accordionExample">
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="headingOne">
+              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne"
+                aria-expanded="true" aria-controls="collapseOne">
+                <strong>Bank Details</strong>
+              </button>
+            </h2>
+            <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne"
+              data-bs-parent="#accordionExample">
+              <div class="accordion-body">
+                <div class="row">
+                  <div class="col">
+                    <label for="">Bank Name :<span style="color: red;">*</span></label>
+                    <input type="text" class="form-control" placeholder="Enter Bank name" aria-label="First name"
+                      id="Bname">
+                  </div>
+                  <div class="col">
+                    <label for="">Branch :</label>
+                    <input type="text" class="form-control" placeholder="branch name" aria-label="Last name"
+                      id="Branch">
+                  </div>
+                </div>
+                <div class="row mt-3">
+                  <div class="col">
+                    <label for="">IFSC Code :<span style="color: red;">*</span></label>
+                    <input type="text" class="form-control" placeholder="Enter IFSC code" aria-label="First name"
+                      id="ifsc">
+                  </div>
+                  <div class="col">
+                    <label for="">Account number :</label>
+                    <input type="tel" class="form-control" placeholder="Account Number" aria-label="Account"
+                      id="accn" minlength="12" maxlength="12">
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="headingTwo">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                <strong>Contact Details</strong>
+              </button>
+            </h2>
+            <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
+              data-bs-parent="#accordionExample">
+              <div class="accordion-body">
+                <div class="row">
+                  <div class="col-md-6">
+                    <label for="inputEmail4" class="form-label">Email-Id :<span style="color: red;">*</span></label>
+                    <input type="email" class="form-control" id="Emailr" placeholder="abc@gmail.com">
+                  </div>
+                  <div class="col-md-6">
+                    <label for="inputEmail4" class="form-label">Email :</label>
+                    <input type="email" class="form-control" id="Email">
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="input-group mt-4">
+                      <span class="input-group-text" id="inputGroup-sizing-default">Mobile No :<span
+                          style="color: red;">*</span></span>
+                      <input type="tel" class="form-control" aria-label="Sizing example input"
+                        aria-describedby="inputGroup-sizing-default" id="mob" minlength="10" maxlength="10">
+                    </div>
+
+                  </div>
+                  <div class="col-md-6">
+                    <label for="tel" class="form-label">Tel :</label>
+                    <input type="number" class="form-control" id="tel" placeholder="10Digit">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="headingThree">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                <strong> Document Details</strong>
+              </button>
+            </h2>
+            <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree"
+              data-bs-parent="#accordionExample">
+              <div class="accordion-body">
+                <div class="row">
+                  <div class="col-md-6">
+                    <label for="aadhar" class="form-label">Aadhar Number :<span style="color: red;">*</span></label>
+                    <input type="tel" class="form-control" id="aadhar" placeholder="12Digit" minlength="12"
+                      maxlength="12">
+                  </div>
+                  <div class="col-md-6">
+                    <label for="pan" class="form-label">Pan Number :<span style="color: red;">*</span></label>
+                    <input type="text" class="form-control" id="pan" placeholder="10Digit" maxlength="10"
+                      minlength="10">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 mx-md-auto d-flex justify-content-between">
+          <button class="btn btn-success btn-lg mt-3" type="Submit" value="Submit"
+            onclick="accountvalidate()">Submit</button>
+          <button class="btn btn-outline-danger btn-lg mt-3" type="" value="Cancle"
+            onclick="clearAccount()">Cancle</button>
+        </div>
+      </div>
+
+      <!-------------Family------------------- -->
+      <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab" tabindex="0">
+        <div class="accordion accordion-flush mt-5" id="accordionFlushExample">
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                Family Details
+              </button>
+            </h2>
+            <div id="flush-collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+              <div class="accordion-body">
+                <div class="row">
+                  <div class="col">
+                    <input type="text" class="form-control" placeholder="Fathers name" aria-label="First name"
+                      id="Fathername">
+                  </div>
+                  <div class="col">
+                    <input type="text" class="form-control" placeholder="Mothers name" aria-label="Last name"
+                      id="Mothername">
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col">
+                    <select class="form-select form-select-md mt-3" aria-label="Large select example"
+                      id="MaritalStatus">
+                      <option selected>Select Marital Status</option>
+                      <option value="Single">Single</option>
+                      <option value="Married">Married</option>
+                      <option value="Divorced">Divorced</option>
+                    </select>
+                  </div>
+                  <div class="col mt-3">
+                    <input type="text" class="form-control" placeholder="Spouse name" aria-label="Last name"
+                      id="Spouse">
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+                Address Details
+              </button>
+            </h2>
+            <div id="flush-collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+              <div class="accordion-body">
+                <div class="row g-3">
+                  <label for="">Current Address :</label>
+                  <div class="col-sm-7">
+
+                    <input type="text" class="form-control" placeholder="Flat no, city" aria-label="City" id="CCity">
+                  </div>
+                  <div class="col-sm">
+                    <input type="text" class="form-control" placeholder="State" aria-label="State" id="CState">
+                  </div>
+                  <div class="col-sm">
+                    <input type="number" class="form-control" placeholder="Zip" aria-label="Zip" id="CZip">
+                  </div>
+                </div>
+
+                <div class="row g-3 mt-3">
+                  <label for="">Permant Address :</label>
+                  <div class="col-sm-7">
+
+                    <input type="text" class="form-control" placeholder="Address" aria-label="City" id="PCity">
+                  </div>
+                  <div class="col-sm">
+                    <input type="text" class="form-control" placeholder="State" aria-label="State" id="PState">
+                  </div>
+                  <div class="col-sm">
+                    <input type="number" class="form-control" placeholder="Zip" aria-label="Zip" id="PZip">
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="col-md-6 mx-md-auto d-flex justify-content-between">
+          <button class="btn btn-info btn-lg mt-3" type="Submit" value="Submit" onclick="familyValidate()">Submit</button>
+          <button class="btn btn-outline-danger btn-lg mt-3" type="" value="Cancle"
+            onclick="clearFamily()">Cancle</button>
+        </div>
+      </div>
+
+      <!-- ----------------Employment------------------ -->
+      <div class="tab-pane fade" id="nav-disabled" role="tabpanel" aria-labelledby="nav-disabled-tab" tabindex="0">
+        <div class="accordion mt-5" id="accordionExample">
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne"
+                aria-expanded="true" aria-controls="collapseOne">
+                <strong>Recent Employment Details</strong>
+              </button>
+            </h2>
+            <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+              <div class="accordion-body">
+                <div class="row">
+                  <div class="col">
+                    <label for="">Company Name : <span style="color: red;">*</span></label>
+                    <input type="text" class="form-control" placeholder="Enter Company name" aria-label="First name"
+                      id="Company">
+                  </div>
+                  <div class="col">
+                    <label for="">Location :</label>
+                    <input type="text" class="form-control" placeholder="Location" aria-label="Last name" id="Location">
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col">
+                    <label for="">Job Title :<span style="color: red;">*</span></label>
+                    <input type="text" class="form-control" placeholder="Title" aria-label="First name" id="jTitle">
+                  </div>
+                  <div class="col">
+                    <select class="form-select form-select-md mt-4" id="Experience" aria-label="Large select example">
+                      <option selected>Year of Experience</option>
+                      <option value="Single">Less than 1 year</option>
+                      <option value="Married">2 Years</option>
+                      <option value="Divorced">4 Years</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                <strong>Previous Employment Details</strong>
+              </button>
+            </h2>
+            <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+              <div class="accordion-body">
+                <div class="row">
+                  <div class="col">
+                    <label for="">Company Name :<span style="color: red;">*</span></label>
+                    <input type="text" class="form-control" placeholder="Enter Company name" aria-label="First name"
+                      id="PCompany">
+                  </div>
+                  <div class="col">
+                    <label for="">Location :</label>
+                    <input type="text" class="form-control" placeholder="Location" aria-label="Last name"
+                      id="PLocation">
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col">
+                    <label for="">Job Title :<span style="color: red;">*</span></label>
+                    <input type="text" class="form-control" placeholder="Title" aria-label="First name" id="PjTitle">
+                  </div>
+                  <div class="col">
+                    <select class="form-select form-select-md mt-4" id="PExperience" aria-label="Large select example">
+                      <option selected>Year of Experience</option>
+                      <option value="Less than 3 year">Less than 3 year</option>
+                      <option value="5 Years">5 Years</option>
+                      <option value="7 Years">7 Years</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col">
+                    <label for="">Technology Used :</label>
+                    <input type="text" class="form-control" placeholder="Technology used seperated by comma,"
+                      aria-label="First name" id="PTechnology">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="col-md-6 mx-md-auto d-flex justify-content-between">
+          <button class="btn btn-info btn-lg mt-3" type="Submit" value="Submit"
+            onclick="validateEmployment()">Submit</button>
+          <button class="btn btn-outline-danger btn-lg mt-3" type="" value="Cancle"
+            onclick="clearEmployment()">Cancle</button>
+        </div>
+      </div>
+
+      <!-- -----------Assest----------- -->
+      <div class="tab-pane fade" id="nav-Assest" role="tabpanel" aria-labelledby="nav-Assest-tab" tabindex="0">
+        <div class="accordion mt-5" id="accordionExample">
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne"
+                aria-expanded="true" aria-controls="collapseOne">
+                Introduction
+              </button>
+            </h2>
+            <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+              <div class="accordion-body">
+                <div class="form-floating">
+                  <textarea class="form-control" placeholder="Leave a comment here" id="Bio"
+                    style="height: 100px"></textarea>
+                  <label for="floatingTextarea2">Bio In few words</label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                Hobbies
+              </button>
+            </h2>
+            <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+              <div class="accordion-body">
+                <div class="form-floating">
+                  <textarea class="form-control" placeholder="Leave a comment here" id="hobbies"
+                    style="height: 100px"></textarea>
+                  <label for="floatingTextarea2">Comments</label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="col-md-6 mx-md-auto d-flex justify-content-between">
+          <button class="btn btn-info btn-lg mt-3" type="Submit" value="Submit" onclick="validateAssest()">Submit</button>
+          <button class="btn btn-outline-danger btn-lg mt-3" type="" value="Cancle"
+            onclick="clearAssest()">Cancle</button>
+        </div>
+      </div>
+    </div>
+    <!-- </form> -->
+  </div>
+  <!-- </div> -->
+
+  <script>
+
+    // var PArray=[];
+    // ===========personal==============
+    function personalValidate() {
+
+      firstName = document.getElementById("Fname").value;
+      lastName = document.getElementById("Lname").value;
+      gender = document.getElementById("Gender").value;
+      age = document.getElementById("Age").value;
+      City = document.getElementById('City').value;
+      Zip = document.getElementById('Zip').value;
+      state = document.getElementById('State').value;
+      Passout = document.getElementById('Passout').value;
+      Marks = document.getElementById('Marks').value;
+      field = document.getElementById('stream').value;
+      let Bname = document.getElementById("Bname").value;
+
+      const letters = /^[A-Za-z\s]+$/;
+      const year = /\d{4}$/;
+
+      if (!firstName.match(letters) && firstName.value == null) {
+        alert("First Name is Required and not Contain numbers");
+      }
+      else if (!lastName.match(letters) && lastName.value == null) {
+        alert("Last name is Required and not Contain numbers");
+
+      }
+      else if (!gender.match(letters) && gender.value == null) {
+        alert("Gender Is Mandatory");
+
+      }
+      else if (!state.match(letters) && state.value == null) {
+        alert("State Is Mandatory");
+
+      }
+      else if (Passout == "") {
+        alert("Passout year canot empty")
+      }
+      else if (!Passout.match(year)) {
+        alert("Enter year in 4 digit")
+      }
+      else if (!field.match(letters) && field.value == null) {
+        alert("Stream Is Mandatory");
+
+      }
+      else if (!Bname.match(letters) && Bname.value == null) {
+        alert("Bank Name Is Mandatory & not include number");
+
+      }
+      else {
+        alert("Go for Account Details");
+        // submitForm();
+      }
+
+    }
+
+
+    function submitForm() {
+      let personalDetails = localStorage.getItem('formData') ? JSON.parse(localStorage.getItem('formData')) : [];
+
+      let StoredData = {
+        firstName: document.getElementById("Fname").value,
+        lastName: document.getElementById("Lname").value,
+        gender: document.getElementById("Gender").value,
+        age: document.getElementById("Age").value,
+        City: document.getElementById('City').value,
+        Zip: document.getElementById('Zip').value,
+        state: document.getElementById('State').value,
+        Passout: document.getElementById('Passout').value,
+        Marks: document.getElementById('Marks').value,
+        field: document.getElementById('stream').value
+      }
+
+
+      personalDetails.push(StoredData);
+      // PArray.push(personalDetails);
+      localStorage.setItem("formData", JSON.stringify(personalDetails));
+      // localStorage.setItem("Aray",JSON.stringify(PArray));
+      // document.getElementById("PForm").reset();
+      // alert("Submitted");
+      clearPersonal();
+
+    }
+
+    function clearPersonal() {
+      document.getElementById("Fname").value = "";
+      document.getElementById("Lname").value = "";
+      // document.getElementById("Gender").value="";
+      document.getElementById("Age").value = "";
+      document.getElementById('City').value = "";
+      document.getElementById('Zip').value = "";
+      document.getElementById('State').value = "";
+      document.getElementById('Passout').value = "";
+      document.getElementById('Marks').value = "";
+      document.getElementById('stream').value = "";
+
+    }
+
+    // ========Account============
+    function accountvalidate() {
+              let  Bname= document.getElementById("Bname").value;
+              let  Branch= document.getElementById("Branch").value;
+              let  Ifsc= document.getElementById("ifsc").value;
+              let  accn= document.getElementById("accn").value;
+
+              let  Emailr= document.getElementById("Emailr").value;
+              
+              let  mob= document.getElementById("mob").value;
+              
+
+              let  aadhar= document.getElementById("aadhar").value;
+              let  pan= document.getElementById("pan").value;
+
+             let fatherName= document.getElementById("Fathername").value;
+           
+              const letters = /^[A-Za-z\s]+$/;
+              const emailValid=/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+              const count=/\d{10}$/;
+
+            //    if(!Bname.match(letters) && Bname.value == null){
+            //       alert("Bank Name Is Mandatory & not include number");
+
+            //     }
+                 if(Ifsc == ""){
+                  alert("IFsc code Is Mandatory");
+
+                }
+                else if(!Emailr.match(emailValid) && Emailr.value == null){
+                  alert("Email is mandatory");
+
+                }
+                else if(!mob.match(count)){
+                  alert("Fill Proper Mobile Number");
+
+                }
+                else if(mob == ""){
+                  alert("Mobile Number is Mandatory");
+
+                }
+                
+                else if(aadhar == ""){
+                  alert("Aadhar  Number is Mandatory");
+
+                }
+                else if(pan == ""){
+                  alert("Pan Number is Mandatory");
+
+                }
+                else if(!fatherName.match(letters) && fatherName.value == null){
+                  alert("fathers Name Is Mandatory & not include number");
+
+                }
+                else{
+                  alert("Form Submitted");
+                  // submitAccount();
+                }
+
+      }
+
+
+    function submitAccount() {
+
+      let accountArray = localStorage.getItem('Account') ? JSON.parse(localStorage.getItem('Account')) : [];
+
+      let accountData = {
+        Bname: document.getElementById("Bname").value,
+        Branch: document.getElementById("Branch").value,
+        Ifsc: document.getElementById("ifsc").value,
+        accn: document.getElementById("accn").value,
+
+        Emailr: document.getElementById("Emailr").value,
+        EmailO: document.getElementById("Email").value,
+        mob: document.getElementById("mob").value,
+        tel: document.getElementById("tel").value,
+
+        aadhar: document.getElementById("aadhar").value,
+        pan: document.getElementById("pan").value
+
+      }
+
+      accountArray.push(accountData);
+      localStorage.setItem("Account", JSON.stringify(accountArray));
+      // reset();
+      clearAccount();
+
+
+
+    }
+
+    function clearAccount() {
+      document.getElementById("Bname").value = "";
+      document.getElementById("Branch").value = "";
+      document.getElementById("ifsc").value = "";
+      document.getElementById("accn").value = "";
+      document.getElementById("Emailr").value = "";
+      document.getElementById("Email").value = "";
+      document.getElementById("mob").value = "";
+      document.getElementById("tel").value = "";
+      document.getElementById("aadhar").value = "";
+      document.getElementById("pan").value = "";
+
+    }
+
+    //==========Family===========
+    function familyValidate() {
+       let  fatherName= document.getElementById("Fathername").value;
+        let    Company=   document.getElementById("Company").value;
+        const letters = /^[A-Za-z\s]+$/;
+         if(!fatherName.match(letters) && fatherName.value == null){
+                  alert("fathers Name Is Mandatory & not include number");
+
+                }
+                else if(!Company.match(letters) && Company.value == null){
+                      alert("Company Name is mandatory");
+                }
+                else{
+                  alert("Go for Employment details");
+                  // Family();
+                }
+
+        
+       }
+
+
+    function Family() {
+      let familyArray = localStorage.getItem('Family') ? JSON.parse(localStorage.getItem('Family')) : [];
+
+      var family = {
+        fatherName: document.getElementById("Fathername").value,
+        motherName: document.getElementById("Mothername").value,
+        MaritalStatus: document.getElementById("MaritalStatus").value,
+        spouseName: document.getElementById("Spouse").value,
+
+        CCity: document.getElementById("CCity").value,
+        CState: document.getElementById("CState").value,
+        CZip: document.getElementById("CZip").value,
+
+        PCity: document.getElementById("PCity").value,
+        PState: document.getElementById("PState").value,
+        PZip: document.getElementById("PZip").value
+
+      }
+      familyArray.push(family);
+      localStorage.setItem("Family", JSON.stringify(familyArray));
+      clearFamily();
+
+    }
+
+    function clearFamily() {
+
+      document.getElementById("Fathername").value = "";
+      document.getElementById("Mothername").value = "";
+      // document.getElementById("MaritalStatus").value="";
+      document.getElementById("Spouse").value = "";
+
+      document.getElementById("CCity").value = "";
+      document.getElementById("CState").value = "";
+      document.getElementById("CZip").value = "";
+
+      document.getElementById("PCity").value = "";
+      document.getElementById("PState").value = "";
+      document.getElementById("PZip").value = "";
+
+    }
+
+    // ==========Employment==========
+    function validateEmployment() {
+
+let    Company=   document.getElementById("Company").value;
+let   Location=  document.getElementById("Location").value;
+let     jTitle=  document.getElementById("jTitle").value;
+let Experience=document.getElementById("Experience").value;
+ let    PCompany=   document.getElementById("PCompany").value;
+ let   PLocation=  document.getElementById("PLocation").value;
+ let     PjTitle=    document.getElementById("PjTitle").value;
+ let PExperience=document.getElementById("PExperience").value;
+ let PTechnology= document.getElementById("PTechnology").value;
+ let hobbies= document.getElementById("hobbies").value;
+
+ const letters = /^[A-Za-z\s]+$/;
+ if(!Company.match(letters) && Company.value==null){
+     alert("Company name is mandatory");
+ }
+ else if(!jTitle.match(letters) && jTitle.value==null){
+     alert("Job Title is mandatory");
+ }
+ else if(!PCompany.match(letters) && PCompany.value==null){
+     alert("Job Title is mandatory");
+ }
+ else if(!PjTitle.match(letters) && PjTitle.value==null){
+     alert("Job Title is mandatory");
+ }
+ else if(!hobbies.match(letters) && hobbies.value==null){
+     alert(" Hobbies is mandatory");
+ }
+ else{
+   alert("Go for Assest Details");
+   // Employment();
+ }
+ 
+}
+
+
+    function Employment() {
+      let employmentArray = localStorage.getItem('Employment') ? JSON.parse(localStorage.getItem('Employment')) : [];
+
+      var employment = {
+        Company: document.getElementById("Company").value,
+        Location: document.getElementById("Location").value,
+        jTitle: document.getElementById("jTitle").value,
+        Experience: document.getElementById("Experience").value,
+
+        PCompany: document.getElementById("PCompany").value,
+        PLocation: document.getElementById("PLocation").value,
+        PjTitle: document.getElementById("PjTitle").value,
+        PExperience: document.getElementById("PExperience").value,
+        PTechnology: document.getElementById("PTechnology").value
+      }
+      employmentArray.push(employment);
+      localStorage.setItem('Employment', JSON.stringify(employmentArray));
+      clearEmployment();
+
+    }
+
+    function clearEmployment() {
+      document.getElementById("Company").value = "";
+      document.getElementById("Location").value = "";
+      document.getElementById("jTitle").value = "";
+      // document.getElementById("Experience").value="";
+
+      document.getElementById("PCompany").value = "";
+      document.getElementById("PLocation").value = "";
+      document.getElementById("PjTitle").value = "";
+      // document.getElementById("PExperience").value="";
+      document.getElementById("PTechnology").value = "";
+
+    }
+
+    // =======Assest==============
+    function validateAssest() {
+          // alert("Function");
+          let hobbies= document.getElementById("hobbies").value;
+          let  firstName= document.getElementById("Fname").value;
+
+          const letters = /^[A-Za-z\s]+$/;
+          // alert("Function");
+          if(!hobbies.match(letters) && hobbies.value==null){
+              alert(" Hobbies are mandatory");
+          }
+          else if(!firstName.match(letters) && firstName.value == null){
+              alert("Please Fill Personal Details !!");
+          }
+          else{
+            // alert("Function");
+          submitForm();
+          submitAccount();
+          Family();
+          Employment();
+          Assest();
+          alert("Form Submitted");
+        }
+        }
+
+        function Assest() {
+          let assestArray= localStorage.getItem('Assest')? JSON.parse(localStorage.getItem('Assest')):[];
+
+          var assest={
+            Bio: document.getElementById("Bio").value,
+            hobbies: document.getElementById("hobbies").value
+          }
+          assestArray.push(assest);
+          localStorage.setItem('Assest',JSON.stringify(assestArray));
+          clearAssest()
+
+        }
+
+
+    function clearAssest() {
+      document.getElementById("Bio").value = "";
+      document.getElementById("hobbies").value = "";
+    }
+
+    
+    function searchTable() {
+      
+    }
+
+
+
+
+
+  </script>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+    integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
+    integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
+    crossorigin="anonymous"></script>
+</body>
+
+</html>
