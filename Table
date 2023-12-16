@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+      crossorigin="anonymous"
+    ></script>
+    <style>
+      body{
+        background-color: #8EC5FC;
+        background-image: linear-gradient(62deg, #8EC5FC 0%, #E0C3FC 100%);
+
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- <button onclick="homeTable()">Add</button> -->
+
+    <!-- <button onclick="method1()">Click</button> -->
+     
+    <div class="container d-flex justify-content-center mt-3">
+      <button class="btn btn-outline-success"  onclick="homeTable()" style="background: linear-gradient(to right, #833ab4, #fd1d1d, #fcb045); ">Add Record To Table</button>
+    </div>
+    <!-- <tr style="align-content: center;" ></tr> -->
+    <div class="container" id="T-list"></div>
+    <!-- <div>
+        <button onclick=" displayData(jData)">Create</button>
+    </div> -->
+
+    <script>
+    //   window.onload = function () {
+    //     console.log("Hello World");
+    //     localStorage.getItem("Array");
+    //   };
+
+    window.onload=function(){
+        for (let i = 0; i <localStorage.length; i++) {
+          let key="arr_"+i;
+          var x=localStorage.getItem(key);
+          var getData=JSON.parse(x);
+          jData.push(getData);
+          
+        }
+        displayData(jData);
+      }
+
+      let jData = [
+        // {
+        //     firstname: "Gaurav",
+        //     lastname: "Patil",
+        //     dept: "Developer",
+        //     salary: 10000,
+        //     Age: 21,
+        //     Action: `<button type="button" class="btn btn-outline-success"onclick="homeTable()">Add</button>
+        //             <button type="button" class="btn btn-outline-danger" onclick="deleteRow(this)">Delete</button>`
+        // },
+        // {
+        //     firstname: "Tushar",
+        //     lastname: "Patil",
+        //     dept: "Engineer",
+        //     salary: 12345,
+        //     Age: 20,
+        //     Action: `<button type="button" class="btn btn-outline-success"onclick="homeTable()">Add</button>
+        //             <button type="button" class="btn btn-outline-danger" >Delete</button>`
+        // },
+        // {
+        //     firstname: "Gaurav",
+        //     lastname: "Dhamankar",
+        //     dept: "Software",
+        //     salary: 12000,
+        //     Age: 21,
+        //     Action: `<button type="button" class="btn btn-outline-success"onclick="homeTable()">Add</button>
+        //             <button type="button" class="btn btn-outline-danger">Delete</button>`
+        // },
+        // {
+        //     firstname: "Mohit",
+        //     lastname: "Khodse",
+        //     dept: "Engineer",
+        //     salary: 13000,
+        //     Age: 21,
+        //     Action: `<button type="button" class="btn btn-outline-success"onclick="homeTable()">Add</button>
+        //             <button type="button" class="btn btn-outline-danger">Delete</button>`
+        // },
+        // {
+        //     firstname: "Gaurav",
+        //     lastname: "Patil",
+        //     dept: "Developer",
+        //     salary: 10000,
+        //     Age: 21,
+        //     Action: `<button type="button" class="btn btn-outline-success"onclick="homeTable()">Add</button>
+        //             <button type="button" class="btn btn-outline-danger" id="5" onclick="DeleteItem(5)">Delete</button>`
+        // }
+      ];
+      // console.log(jData);
+    
+      let homeTable = () => {
+        const letters = /^[A-Za-z\s]+$/;
+        firstname =(prompt("Enter first Name"));     
+        lastname = prompt("Enter last Name");
+        dept = prompt("Enter Job title");
+        salary = prompt("Enter the Salary");
+        Age = prompt("Enter Age");
+        Action = `<button type="button" class="btn btn-outline-success"onclick="homeTable()">Add</button>
+                   <button type="button" class="btn btn-outline-danger" onclick="deleteRow(this)">Delete</button>`;
+        
+
+        //            validInput(firstname,lastname,dept,Age);
+
+
+        //  function validInput(firstname,lastname,dept,Age){
+        //   const letters = /^[A-Za-z\s]+$/;
+
+        //    if(!firstName.match(letters)){
+        //    alert("Please Enter valid Fullname it should not be empty or not contain numbers")
+        //    return;
+        //  }
+        //  else{
+        //   alert('heli me');
+        //  }
+            
+          
+        //  }  
+        
+          let obj1 = {
+            firstname: firstname,
+            lastname: lastname,
+            dept: dept,
+            salary: salary,
+            Age: Age,
+            Action: Action,
+          };
+          jData.push(obj1);
+          displayData(jData);
+          console.log(jData);
+          // localStorage.setItem("Array", JSON.stringify(jData));
+          // localStorage.getItem("Array");
+          // let key;
+         
+       
+      method1();
+          
+
+         
+          // let kdata;
+          // for (let index = 0; index < 10; index++) {
+          //   kdata = localStorage.getItem(key);
+          // }
+          // let dd = JSON.parse(kdata);
+          // console.log("kdata" + dd);
+          // userdata=localStorage.getItem(key);
+          // displayData(userdata);
+        
+      };
+
+      // let newArr=jData.map(myFunction);
+      // function myFunction(value,index){
+      //    return value;
+      // }
+
+      // localStorage.setItem("Array_1",JSON.stringify(jData))
+
+      function displayData(jData) {
+        let table = ' <table class="table table-striped table-hover mt-4 " id="myTable" >';
+        table += `<thead class="table-info" style="height:50px;">
+                <tr >
+
+                    <th scope="col">First-Name</th>
+                    <th scope="col">Last-Name</th>
+                    <th scope="col">Job Title</th>
+                    <th scope="col">Salary</th>
+                    <th scope="col">Age</th>
+                    <th scope="col" >Action</th>
+
+                </tr>
+            </thead>`;
+        jData.forEach((tRow, index) => {
+          table = table + `<tr>`;
+          table = table + `<td> ${tRow.firstname}</td>`;
+          table = table + `<td> ${tRow.lastname}</td>`;
+          table = table + `<td> ${tRow.dept}</td>`;
+          table = table + `<td> ${tRow.salary}</td>`;
+          table = table + `<td> ${tRow.Age}</td>`;
+          table = table + `<td> ${tRow.Action}</td>`;
+          table += `</tr>`;
+        });
+        table += "</table>";
+        document.getElementById("T-list").innerHTML = table;
+      }
+
+      displayData(jData);
+
+      // const DeleteItem=()=> {
+      //   for (let i = 0;; i++) {
+      //     let key="arr_"+i;
+      //     var x=localStorage.getItem(key);
+      //     var getData=JSON.parse(x);
+      //     if(getData.length>0){
+      //       const DeleteItem=getData.pop();
+      //       localStorage.setItem("arr_"+i,JSON.stringify(getData));
+      //       console.log("data added");
+      //     }
+      //     else{
+      //       console.log("not removed");
+      //     }
+      //   }
+      // }
+
+      function deleteRow(r) {
+       var e = r.parentNode.parentNode.rowIndex;
+       var index=(Number)(e-1);
+       let key="arr_"+index
+       localStorage.removeItem(key);
+       document.getElementById("myTable").deleteRow(e);
+      //  window.location.reload();
+       console.log(jData);
+       
+       for (let j = 0; j < jData.length; j++) {
+         if(index==j){
+           jData.splice(j,1);
+         }
+        
+       }
+       method1();
+     
+        }
+
+        function method1() {
+          localStorage.clear();
+        for (let i = 0; i < jData.length; i++) {
+            key = "arr_" + i;
+
+            localStorage.setItem(key, JSON.stringify(jData[i]));
+          }
+      }
+    </script>
+  </body>
+</html>
